@@ -50,11 +50,9 @@ func (c *gcsClient) downloadAndProcessChunks() {
 		log.Fatal(err)
 	}
 
-	counter := 0
-
 	objs := bucket.Objects(c.config.Context, query)
 
-	for counter = 0; counter < 1000; counter++ {
+	for {
 		attrs, err := objs.Next()
 
 		if err == iterator.Done {
