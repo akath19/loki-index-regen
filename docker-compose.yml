@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  loki:
+    image: grafana/loki:1.5.0
+    ports:
+      - 3100:3100
+    volumes:
+    - ./config/loki.yaml:/etc/loki/local-config.yaml
+    - ./data:/loki
+  grafana:
+      image: grafana/grafana:7.0.2
+      ports:
+        - 3000:3000

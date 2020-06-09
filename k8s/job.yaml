@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: loki-index-regen
+  namespace: logging
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: index-regenerator
+          image: gcr.io/non-cde-clusters-production/loki-index-regen:1.0.1
+          imagePullPolicy: Always
+          env:
+            - name: PROJECT_ID
+              value: yp-prod-logs-storage
+            - name: BUCKET_NAME
+              value: unicomer-production-logs
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /credentials/key.json
+            - name: LOKI_ADDRESS
+              value: http://loki-indexed:3100
+            - name: CHUNKS_PATH
+              value: /app/chunks
+          volumeMounts:
+            - mountPath: /credentials
+              name: credentials
+            - name: scratch
+              mountPath: /app/chunks
+      volumes:
+        - name: credentials
+          secret:
+            secretName: loki-gcs
+        - name: scratch
+          emptyDir: {}

@@ -1,0 +1,6 @@
+.idea/
+chunks/
+data/
+k8s/loki-values.yaml
+logs/
+credentials.json

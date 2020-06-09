@@ -1,0 +1,20 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: ./promtail/positions.yaml # This location needs to be writeable by promtail.
+
+client:
+  url: http://loki:3100/config/api/v1/push
+
+scrape_configs:
+  - job_name: system
+    pipeline_stages:
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs  # A `job` label is fairly standard in prometheus and useful for linking metrics and logs.
+          host: yourhost # A `host` label will help identify logs from this machine vs others
+          __path__: C:\Windows\System32\winevt\logs\**  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
